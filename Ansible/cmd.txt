@@ -1,0 +1,5 @@
+mkdir /opt
+ansible all -m ping -i /opt/hosts
+cd /opt
+ansible-playbook -i hosts jenkins-master-setup.yaml
+ansible-playbook -i hosts jenkins-slave-setup.yaml

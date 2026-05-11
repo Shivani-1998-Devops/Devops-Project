@@ -1,0 +1,69 @@
+---
+- hosts: jenkins-slave
+  become: true
+
+  tasks:
+
+    - name: update ubuntu repo and cache
+      apt:
+        update_cache: yes
+        force_apt_get: yes
+        cache_valid_time: 3600
+
+    - name: Install Java 21 and required packages
+      apt:
+        name:
+          - fontconfig
+          - openjdk-21-jre
+          - wget
+          - gnupg
+        state: present
+
+    - name: download maven packages
+      get_url:
+        url: https://archive.apache.org/dist/maven/maven-3/3.9.2/binaries/apache-maven-3.9.2-bin.tar.gz
+        dest: /opt/apache-maven-3.9.2-bin.tar.gz
+        mode: '0644'
+
+    - name: extract maven packages
+      unarchive:
+        src: /opt/apache-maven-3.9.2-bin.tar.gz
+        dest: /opt
+        remote_src: yes
+
+    - name: create maven symbolic link
+      file:
+        src: /opt/apache-maven-3.9.2
+        dest: /opt/maven
+        state: link
+
+    - name: set maven environment variables
+      copy:
+        dest: /etc/profile.d/maven.sh
+        content: |
+          export M2_HOME=/opt/maven
+          export PATH=${M2_HOME}/bin:${PATH}
+        mode: '0755'
+
+    - name: install docker
+      apt:
+        name: docker.io
+        state: present
+
+    - name: start docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: give permissions on docker socket
+      file:
+        path: /var/run/docker.sock
+        state: file
+        mode: '0777'
+
+    - name: add ubuntu user to docker group
+      user:
+        name: ubuntu
+        groups: docker
+        append: yes

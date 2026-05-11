@@ -1,0 +1,15 @@
+[jenkins-master]
+10.1.1.85
+
+[jenkins-master:vars]
+ansible_user=ubuntu
+ansible_ssh_private_key_file=/opt/linux-key.pem
+
+[jenkins-slave]
+10.1.1.155
+
+[jenkins-slave:vars]
+ansible_user=ubuntu
+ansible_ssh_private_key_file=/opt/linux-key.pem   =>Add Your Key name and ust be present at this location
+
+
