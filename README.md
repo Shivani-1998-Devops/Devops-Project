@@ -7,6 +7,11 @@ This repository contains an AWS infrastructure and CI/CD setup using Terraform a
 - `terraform/` creates AWS networking resources, a public bastion host, and Jenkins-related EC2 instances
 - `Ansible/` installs Jenkins on the master node and prepares a Jenkins slave node with Java, Maven, and Docker
 
+## Setup Prerequisites
+
+Before proceeding, ensure your local environment is set up correctly. Refer to the detailed setup guide:  
+[Prepare Terraform Environment on Windows](./Setup/01_Intiall%20Step.md)
+
 ## Repository Structure
 
 - `terraform/provider.tf` - AWS provider configuration (`ap-south-1` region)
